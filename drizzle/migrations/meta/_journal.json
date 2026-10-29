@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792680468928,
+      "tag": "0000_core_invoicing",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792760768719,
+      "tag": "0001_validate_invoice_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792833196867,
+      "tag": "0002_admin_controls",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792942920204,
+      "tag": "0003_admin_suspension_enforcement",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793021879879,
+      "tag": "0004_business_documents",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793085648760,
+      "tag": "0005_document_sharing",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793085934033,
+      "tag": "0006_business_catalog_finance",
+      "breakpoints": true
+    }
+  ]
+}
