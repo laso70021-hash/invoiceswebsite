@@ -14,6 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_team_events: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          owner_id: string
+          target_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          owner_id: string
+          target_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          owner_id?: string
+          target_id?: string | null
+        }
+        Relationships: []
+      }
+      business_team_invites: {
+        Row: {
+          email: string
+          expires_at: string
+          id: string
+          owner_id: string
+          role: string
+        }
+        Insert: {
+          email: string
+          expires_at?: string
+          id?: string
+          owner_id: string
+          role: string
+        }
+        Update: {
+          email?: string
+          expires_at?: string
+          id?: string
+          owner_id?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      business_team_members: {
+        Row: {
+          joined_at: string
+          member_id: string
+          owner_id: string
+          role: string
+        }
+        Insert: {
+          joined_at?: string
+          member_id: string
+          owner_id: string
+          role: string
+        }
+        Update: {
+          joined_at?: string
+          member_id?: string
+          owner_id?: string
+          role?: string
+        }
+        Relationships: []
+      }
       catalog_items: {
         Row: {
           created_at: string
@@ -77,6 +197,125 @@ export type Database = {
           name?: string
           phone?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      document_items: {
+        Row: {
+          amount: number
+          description: string
+          discount_percent: number
+          document_id: string
+          id: string
+          quantity: number
+          sort_order: number
+          tax_percent: number
+          unit_price: number
+        }
+        Insert: {
+          amount?: number
+          description: string
+          discount_percent?: number
+          document_id: string
+          id?: string
+          quantity?: number
+          sort_order?: number
+          tax_percent?: number
+          unit_price?: number
+        }
+        Update: {
+          amount?: number
+          description?: string
+          discount_percent?: number
+          document_id?: string
+          id?: string
+          quantity?: number
+          sort_order?: number
+          tax_percent?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_items_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_templates: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          name: string
+          preview_image_url: string | null
+          primary_color: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id: string
+          is_published?: boolean
+          name: string
+          preview_image_url?: string | null
+          primary_color?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          name?: string
+          preview_image_url?: string | null
+          primary_color?: string
+        }
+        Relationships: []
+      }
+      document_types: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          editor_mode: string
+          icon_name: string
+          id: string
+          is_popular: boolean
+          name: string
+          slug: string
+          status: string
+          updated_at: string
+          usage_count: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          editor_mode: string
+          icon_name: string
+          id: string
+          is_popular?: boolean
+          name: string
+          slug: string
+          status?: string
+          updated_at?: string
+          usage_count?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          editor_mode?: string
+          icon_name?: string
+          id?: string
+          is_popular?: boolean
+          name?: string
+          slug?: string
+          status?: string
+          updated_at?: string
+          usage_count?: number
         }
         Relationships: []
       }
@@ -190,10 +429,45 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "expenses_supplier_id_fkey"
+            foreignKeyName: "expenses_supplier_id_fkey1"
             columns: ["supplier_id"]
             isOneToOne: false
             referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_shares: {
+        Row: {
+          created_at: string
+          invoice_id: string
+          owner_id: string
+          public_enabled: boolean
+          recipient_id: string | null
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          invoice_id: string
+          owner_id: string
+          public_enabled?: boolean
+          recipient_id?: string | null
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          invoice_id?: string
+          owner_id?: string
+          public_enabled?: boolean
+          recipient_id?: string | null
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_shares_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: true
+            referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -263,6 +537,589 @@ export type Database = {
           },
         ]
       }
+      legacy_invoices_customers: {
+        Row: {
+          address: string
+          balance: number
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          organization_id: string
+          phone: string | null
+          tax_number: string | null
+          total_collected: number
+          total_invoiced: number
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          balance?: number
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          organization_id: string
+          phone?: string | null
+          tax_number?: string | null
+          total_collected?: number
+          total_invoiced?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          balance?: number
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          organization_id?: string
+          phone?: string | null
+          tax_number?: string | null
+          total_collected?: number
+          total_invoiced?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_invoices_documents: {
+        Row: {
+          amount_paid: number
+          balance_due: number
+          converted_from_id: string | null
+          created_at: string
+          currency: string
+          currency_symbol: string
+          customer_address: string | null
+          customer_email: string
+          customer_id: string | null
+          customer_name: string
+          customer_tax_number: string | null
+          discount_total: number
+          document_number: string
+          due_date: string | null
+          id: string
+          issue_date: string
+          logo_position: string
+          logo_size: string
+          logo_url: string | null
+          notes: string | null
+          organization_id: string
+          payment_instructions: string | null
+          payment_terms: string
+          pdf_storage_path: string | null
+          primary_color: string
+          rich_text_content: string | null
+          status: string
+          subtotal: number
+          tax_total: number
+          template_id: string
+          title: string
+          total: number
+          type: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          amount_paid?: number
+          balance_due?: number
+          converted_from_id?: string | null
+          created_at?: string
+          currency?: string
+          currency_symbol?: string
+          customer_address?: string | null
+          customer_email: string
+          customer_id?: string | null
+          customer_name: string
+          customer_tax_number?: string | null
+          discount_total?: number
+          document_number: string
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          logo_position?: string
+          logo_size?: string
+          logo_url?: string | null
+          notes?: string | null
+          organization_id: string
+          payment_instructions?: string | null
+          payment_terms?: string
+          pdf_storage_path?: string | null
+          primary_color?: string
+          rich_text_content?: string | null
+          status: string
+          subtotal?: number
+          tax_total?: number
+          template_id?: string
+          title: string
+          total?: number
+          type: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          amount_paid?: number
+          balance_due?: number
+          converted_from_id?: string | null
+          created_at?: string
+          currency?: string
+          currency_symbol?: string
+          customer_address?: string | null
+          customer_email?: string
+          customer_id?: string | null
+          customer_name?: string
+          customer_tax_number?: string | null
+          discount_total?: number
+          document_number?: string
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          logo_position?: string
+          logo_size?: string
+          logo_url?: string | null
+          notes?: string | null
+          organization_id?: string
+          payment_instructions?: string | null
+          payment_terms?: string
+          pdf_storage_path?: string | null
+          primary_color?: string
+          rich_text_content?: string | null
+          status?: string
+          subtotal?: number
+          tax_total?: number
+          template_id?: string
+          title?: string
+          total?: number
+          type?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_converted_from_id_fkey"
+            columns: ["converted_from_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_type_fkey"
+            columns: ["type"]
+            isOneToOne: false
+            referencedRelation: "document_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_invoices_expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          date: string
+          expense_number: string
+          id: string
+          organization_id: string
+          payment_method: string
+          receipt_url: string | null
+          supplier_id: string | null
+          title: string
+          vendor: string
+        }
+        Insert: {
+          amount?: number
+          category?: string
+          created_at?: string
+          date?: string
+          expense_number: string
+          id?: string
+          organization_id: string
+          payment_method?: string
+          receipt_url?: string | null
+          supplier_id?: string | null
+          title: string
+          vendor: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          date?: string
+          expense_number?: string
+          id?: string
+          organization_id?: string
+          payment_method?: string
+          receipt_url?: string | null
+          supplier_id?: string | null
+          title?: string
+          vendor?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_invoices_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string
+          date: string
+          document_id: string | null
+          id: string
+          invoice_number: string
+          method: string
+          organization_id: string
+          payment_number: string
+          receipt_document_id: string | null
+          reference_number: string | null
+          status: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_name: string
+          date?: string
+          document_id?: string | null
+          id?: string
+          invoice_number: string
+          method: string
+          organization_id: string
+          payment_number: string
+          receipt_document_id?: string | null
+          reference_number?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string
+          date?: string
+          document_id?: string | null
+          id?: string
+          invoice_number?: string
+          method?: string
+          organization_id?: string
+          payment_number?: string
+          receipt_document_id?: string | null
+          reference_number?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_receipt_document_id_fkey"
+            columns: ["receipt_document_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_invoices_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          is_platform_admin: boolean
+          phone: string | null
+          preferred_currency: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          is_platform_admin?: boolean
+          phone?: string | null
+          preferred_currency?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_platform_admin?: boolean
+          phone?: string | null
+          preferred_currency?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      legacy_invoices_suppliers: {
+        Row: {
+          address: string | null
+          balance_due: number
+          category: string
+          contact_person: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          organization_id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          balance_due?: number
+          category?: string
+          contact_person?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          organization_id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          balance_due?: number
+          category?: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          organization_id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suppliers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_invitations: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invitation_token: string
+          organization_id: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invitation_token?: string
+          organization_id: string
+          role: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invitation_token?: string
+          organization_id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          organization_id: string
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          organization_id: string
+          role: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          organization_id?: string
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          account_number: string | null
+          address: string
+          bank_name: string | null
+          country: string
+          created_at: string
+          currency: string
+          currency_symbol: string
+          default_tax_rate: number
+          email: string
+          id: string
+          invoice_prefix: string
+          logo_position: string
+          logo_size: string
+          logo_url: string | null
+          mobile_money_number: string | null
+          name: string
+          phone: string | null
+          primary_color: string
+          slug: string
+          subscription_status: string
+          tax_number: string | null
+          terms_and_conditions: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_number?: string | null
+          address: string
+          bank_name?: string | null
+          country?: string
+          created_at?: string
+          currency?: string
+          currency_symbol?: string
+          default_tax_rate?: number
+          email: string
+          id?: string
+          invoice_prefix?: string
+          logo_position?: string
+          logo_size?: string
+          logo_url?: string | null
+          mobile_money_number?: string | null
+          name: string
+          phone?: string | null
+          primary_color?: string
+          slug: string
+          subscription_status?: string
+          tax_number?: string | null
+          terms_and_conditions?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_number?: string | null
+          address?: string
+          bank_name?: string | null
+          country?: string
+          created_at?: string
+          currency?: string
+          currency_symbol?: string
+          default_tax_rate?: number
+          email?: string
+          id?: string
+          invoice_prefix?: string
+          logo_position?: string
+          logo_size?: string
+          logo_url?: string | null
+          mobile_money_number?: string | null
+          name?: string
+          phone?: string | null
+          primary_color?: string
+          slug?: string
+          subscription_status?: string
+          tax_number?: string | null
+          terms_and_conditions?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -301,63 +1158,184 @@ export type Database = {
           },
         ]
       }
+      platform_admins: {
+        Row: {
+          granted_at: string
+          granted_by: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          granted_at?: string
+          granted_by?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          granted_at?: string
+          granted_by?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_admins_granted_by_fkey"
+            columns: ["granted_by"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "platform_admins_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "legacy_invoices_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          organization_id: string
+          sku: string | null
+          status: string
+          stock_quantity: number | null
+          tax_rate: number
+          type: string
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          name: string
+          organization_id: string
+          sku?: string | null
+          status?: string
+          stock_quantity?: number | null
+          tax_rate?: number
+          type: string
+          unit_price?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          organization_id?: string
+          sku?: string | null
+          status?: string
+          stock_quantity?: number | null
+          tax_rate?: number
+          type?: string
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
-          logo_url: string | null
-          whatsapp_number: string | null
-          document_customization: Json
           address: string | null
           brand_color: string
           business_name: string | null
           created_at: string
           currency: string
           default_tax_rate: number
+          document_customization: Json
           email: string | null
           full_name: string | null
           id: string
+          logo_url: string | null
           payment_instructions: string | null
           phone: string | null
           suspended: boolean
           tax_id: string | null
           template_style: string
+          whatsapp_number: string | null
         }
         Insert: {
-          logo_url?: string | null
-          whatsapp_number?: string | null
-          document_customization?: Json
           address?: string | null
           brand_color?: string
           business_name?: string | null
           created_at?: string
           currency?: string
           default_tax_rate?: number
+          document_customization?: Json
           email?: string | null
           full_name?: string | null
           id: string
+          logo_url?: string | null
           payment_instructions?: string | null
           phone?: string | null
           suspended?: boolean
           tax_id?: string | null
           template_style?: string
+          whatsapp_number?: string | null
         }
         Update: {
-          logo_url?: string | null
-          whatsapp_number?: string | null
-          document_customization?: Json
           address?: string | null
           brand_color?: string
           business_name?: string | null
           created_at?: string
           currency?: string
           default_tax_rate?: number
+          document_customization?: Json
           email?: string | null
           full_name?: string | null
           id?: string
+          logo_url?: string | null
           payment_instructions?: string | null
           phone?: string | null
           suspended?: boolean
           tax_id?: string | null
           template_style?: string
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
@@ -417,6 +1395,181 @@ export type Database = {
           },
         ]
       }
+      recurring_profiles: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string | null
+          customer_name: string
+          frequency: string
+          id: string
+          last_generated_at: string | null
+          next_billing_date: string
+          organization_id: string
+          profile_number: string
+          service_description: string
+          status: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_id?: string | null
+          customer_name: string
+          frequency: string
+          id?: string
+          last_generated_at?: string | null
+          next_billing_date: string
+          organization_id: string
+          profile_number: string
+          service_description: string
+          status?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string
+          frequency?: string
+          id?: string
+          last_generated_at?: string | null
+          next_billing_date?: string
+          organization_id?: string
+          profile_number?: string
+          service_description?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_profiles_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recurring_profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_orders: {
+        Row: {
+          amount: number
+          converted_invoice_id: string | null
+          created_at: string
+          customer_id: string | null
+          customer_name: string
+          date: string
+          expected_delivery: string | null
+          id: string
+          items_count: number
+          order_number: string
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          converted_invoice_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          customer_name: string
+          date?: string
+          expected_delivery?: string | null
+          id?: string
+          items_count?: number
+          order_number: string
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          converted_invoice_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string
+          date?: string
+          expected_delivery?: string | null
+          id?: string
+          items_count?: number
+          order_number?: string
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_orders_converted_invoice_id_fkey"
+            columns: ["converted_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_invoices_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          currency: string
+          document_quota: number
+          features: Json
+          id: string
+          is_active: boolean
+          is_popular: boolean
+          monthly_price: number
+          name: string
+          tagline: string | null
+          team_quota: number
+          yearly_price: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          document_quota?: number
+          features?: Json
+          id: string
+          is_active?: boolean
+          is_popular?: boolean
+          monthly_price?: number
+          name: string
+          tagline?: string | null
+          team_quota?: number
+          yearly_price?: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          document_quota?: number
+          features?: Json
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean
+          monthly_price?: number
+          name?: string
+          tagline?: string | null
+          team_quota?: number
+          yearly_price?: number
+        }
+        Relationships: []
+      }
       suppliers: {
         Row: {
           address: string | null
@@ -470,13 +1623,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_invoice_share: { Args: { _invoice: string; _recipient_email: string; _public: boolean }; Returns: string }
-      get_shared_invoice: { Args: { _token: string }; Returns: Json }
-      revoke_invoice_share: { Args: { _invoice: string }; Returns: undefined }
-      received_invoices: { Args: never; Returns: Json }
-      team_overview: { Args: never; Returns: Json }
-      manage_team: { Args: { _action: string; _target?: string; _email?: string; _role?: string }; Returns: Json }
-      team_financial_records: { Args: { _owner: string }; Returns: Json }
       admin_list_users: {
         Args: never
         Returns: {
@@ -496,6 +1642,10 @@ export type Database = {
       admin_set_suspended: {
         Args: { _user: string; _value: boolean }
         Returns: undefined
+      }
+      create_invoice_share: {
+        Args: { _invoice: string; _public: boolean; _recipient_email: string }
+        Returns: string
       }
       get_shared_document: {
         Args: { _token: string }
@@ -517,6 +1667,7 @@ export type Database = {
           total: number
         }[]
       }
+      get_shared_invoice: { Args: { _token: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -525,11 +1676,25 @@ export type Database = {
         Returns: boolean
       }
       is_active: { Args: { _uid: string }; Returns: boolean }
+      is_org_member: { Args: { org_id: string }; Returns: boolean }
+      manage_team: {
+        Args: {
+          _action: string
+          _email?: string
+          _role?: string
+          _target?: string
+        }
+        Returns: Json
+      }
+      received_invoices: { Args: never; Returns: Json }
       respond_shared_document: {
         Args: { _accept: boolean; _token: string }
         Returns: string
       }
+      revoke_invoice_share: { Args: { _invoice: string }; Returns: undefined }
       run_recurring_invoices: { Args: { _only_me?: boolean }; Returns: number }
+      team_financial_records: { Args: { _owner: string }; Returns: Json }
+      team_overview: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"

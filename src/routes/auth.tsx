@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Logo } from "@/components/swahivo/ui";
 
 const safe = (r: unknown) => (typeof r === "string" && r.startsWith("/") && !r.startsWith("//") ? r : "/dashboard");
@@ -55,9 +54,23 @@ function AuthPage() {
   }
 
   async function google() {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth" + (dest !== "/dashboard" ? "?redirect=" + encodeURIComponent(dest) : "") });
-    if (r.error) toast.error(String(r.error.message ?? r.error));
-    else if (!r.redirected) navigate({ to: dest });
+    setBusy(true);
+    try {
+      const redirectTo = new URL("/auth", window.location.origin);
+      if (dest !== "/dashboard") redirectTo.searchParams.set("redirect", dest);
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: redirectTo.toString() },
+      });
+      if (error) {
+        toast.error(error.message);
+        setBusy(false);
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to start Google sign-in.");
+      setBusy(false);
+    }
   }
 
   return (
@@ -66,7 +79,13 @@ function AuthPage() {
         <Logo />
         <h1 className="mt-6 text-2xl font-extrabold">{mode === "in" ? "Welcome back" : "Create your account"}</h1>
         <p className="text-sm text-muted-foreground">{mode === "in" ? "Sign in to manage your invoices." : "Start invoicing in minutes."}</p>
-        <button onClick={google} className="mt-6 w-full rounded-lg border bg-card py-2.5 text-sm font-semibold hover:bg-muted">Continue with Google</button>
+        <button
+          onClick={google}
+          disabled={busy}
+          className="mt-6 w-full rounded-lg border bg-card py-2.5 text-sm font-semibold hover:bg-muted disabled:opacity-60"
+        >
+          {busy ? "Connecting..." : "Continue with Google"}
+        </button>
         <div className="my-4 text-center text-xs text-muted-foreground">or</div>
         <form onSubmit={submit} className="space-y-3">
           {mode === "up" && (
